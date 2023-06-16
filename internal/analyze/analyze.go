@@ -27,16 +27,14 @@ func Foo(f *smf.SMF) []TimeSig {
 			continue
 		}
 
-		switch {
-		case msg.GetMetaMeter(&num, &denom):
-		default:
+		if msg.GetMetaMeter(&num, &denom) {
 			newT := TimeSig{
 				num:   num,
 				denom: denom,
 			}
 			timeSigs = append(timeSigs, newT)
 		}
-
 	}
+
 	return timeSigs
 }
