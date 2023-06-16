@@ -14,7 +14,7 @@ func main() {
 		log.Println("something went wrong")
 	}
 
-	times := analyze.Foo(file)
+	times := analyze.GetTimeSigs(file)
 
 	fmt.Println(times)
 }
