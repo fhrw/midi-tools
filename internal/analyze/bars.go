@@ -20,7 +20,7 @@ func GetTimeSigs(f *smf.SMF) []TimeSig {
 	var timeSigs []TimeSig
 	var absTicks uint64
 
-	for _, event := range tracks[0] {
+	for _, event := range tracks[0] { // prefer not to use [0] index ideally
 		msg := event.Message
 		absTicks += uint64(event.Delta)
 
@@ -45,4 +45,28 @@ func GetTimeSigs(f *smf.SMF) []TimeSig {
 	}
 
 	return timeSigs
+}
+
+func (t TimeSig) GetBarEnd() uint64 {
+	return t.absTicks + uint64(t.num)*GetDenomTicks(t.denom)
+}
+
+func GetDenomTicks(d uint8) uint64 {
+	if d == 2 {
+		return 1920
+	}
+
+	if d == 4 {
+		return 960
+	}
+
+	if d == 8 {
+		return 480
+	}
+
+	if d == 16 {
+		return 240
+	}
+
+	return 0
 }

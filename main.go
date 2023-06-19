@@ -14,7 +14,11 @@ func main() {
 		log.Println("something went wrong")
 	}
 
-	times := analyze.GetTimeSigs(file)
+	notes := analyze.GetAllNotes(file)
 
-	fmt.Println(times)
+	for _, n := range notes {
+		fmt.Println("--- Note ---")
+		fmt.Printf("channel: %v\npitch:%v\nstart:%v\n", n.Channel, n.Pitch, n.Start)
+	}
+
 }
