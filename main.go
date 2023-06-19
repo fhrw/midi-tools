@@ -14,11 +14,12 @@ func main() {
 		log.Println("something went wrong")
 	}
 
-	notes := analyze.GetAllNotes(file)
+	noteOn, noteOff := analyze.GetAllNote(file)
 
-	for _, n := range notes {
-		fmt.Println("--- Note ---")
-		fmt.Printf("channel: %v\npitch:%v\nstart:%v\n", n.Channel, n.Pitch, n.Start)
+	notes := analyze.MatchOnOffs(noteOn, noteOff)
+
+	for _, note := range notes {
+		fmt.Println("--- NOTE ---")
+		fmt.Printf("track: %v pitch: %v start: %v end: %v\n", note.Track, note.Pitch, note.Start, note.End)
 	}
-
 }

@@ -5,16 +5,52 @@ import (
 )
 
 type Note struct {
-	Channel uint8
-	Pitch   uint8
-	Start   uint64
-	End     uint64
+	Track int
+	Pitch uint8
+	Start uint64
+	End   uint64
 }
 
-func GetAllNotes(f *smf.SMF) []Note {
+type NoteOn struct {
+	Track int
+	Pitch uint8
+	Start uint64
+}
+
+type NoteOff struct {
+	Track int
+	Pitch uint8
+	End   uint64
+}
+
+func MatchOnOffs(on []NoteOn, off []NoteOff) []Note {
 	var notes []Note
 
-	for _, track := range f.Tracks {
+	for _, n := range on {
+		var end uint64
+		for _, f := range off {
+			if n.Track == f.Track &&
+				n.Pitch == f.Pitch &&
+				n.Start < f.End {
+				end = f.End
+			}
+		}
+		notes = append(notes, Note{
+			Track: n.Track,
+			Pitch: n.Pitch,
+			Start: n.Start,
+			End:   end,
+		})
+	}
+
+	return notes
+}
+
+func GetAllNote(f *smf.SMF) ([]NoteOn, []NoteOff) {
+	var noteOns []NoteOn
+	var noteOffs []NoteOff
+
+	for i, track := range f.Tracks {
 		var absTicks uint64
 
 		for _, event := range track {
@@ -28,16 +64,25 @@ func GetAllNotes(f *smf.SMF) []Note {
 			)
 
 			if msg.GetNoteOn(&channel, &key, &velo) {
-				note := Note{
-					Channel: channel,
-					Pitch:   key,
-					Start:   absTicks,
+				note := NoteOn{
+					Track: i,
+					Pitch: key,
+					Start: absTicks,
 				}
-				notes = append(notes, note)
+				noteOns = append(noteOns, note)
+			}
+
+			if msg.GetNoteOff(&channel, &key, &velo) {
+				note := NoteOff{
+					Track: i,
+					Pitch: key,
+					End:   absTicks,
+				}
+				noteOffs = append(noteOffs, note)
 			}
 		}
 
 	}
 
-	return notes
+	return noteOns, noteOffs
 }
