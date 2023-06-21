@@ -47,8 +47,8 @@ func GetTimeSigs(f *smf.SMF) []TimeSig {
 	return timeSigs
 }
 
-func (t TimeSig) GetBarEnd() uint64 {
-	return t.absTicks + uint64(t.num)*GetDenomTicks(t.denom)
+func (t TimeSig) GetBarEnd(s uint64) uint64 {
+	return s + uint64(t.num)*GetDenomTicks(t.denom)
 }
 
 func GetDenomTicks(d uint8) uint64 {
