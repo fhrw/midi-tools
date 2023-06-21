@@ -23,17 +23,19 @@ type NoteOff struct {
 	End   uint64
 }
 
-func GetBarNotes(n []Note, s, e uint64) []Note {
+type NoteList []Note
+
+func (n NoteList) GetBarNotes(t int, s, e uint64) NoteList {
 	var notes []Note
 	for _, note := range n {
-		if note.Start >= s && note.Start > e {
+		if note.Start >= s && note.Start < e && note.Track == t {
 			notes = append(notes, note)
 		}
 	}
 	return notes
 }
 
-func MatchOnOffs(on []NoteOn, off []NoteOff) []Note {
+func MatchOnOffs(on []NoteOn, off []NoteOff) NoteList {
 	var notes []Note
 
 	for _, n := range on {
