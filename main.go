@@ -18,8 +18,4 @@ func main() {
 
 	notes := analyze.MatchOnOffs(noteOn, noteOff)
 
-	for _, note := range notes {
-		fmt.Println("--- NOTE ---")
-		fmt.Printf("track: %v pitch: %v start: %v end: %v\n", note.Track, note.Pitch, note.Start, note.End)
-	}
 }
