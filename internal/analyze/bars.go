@@ -12,15 +12,42 @@ type TimeSig struct {
 	AbsTicks uint64
 }
 
+type SigLength struct {
+	Sig  TimeSig
+	Bars uint
+}
+
 type SigList []TimeSig
+
+func (s SigList) CalcSigLengths(sl []SigLength) []SigLength {
+	if len(sl) == len(s)-1 {
+		sl = append(sl, SigLength{Sig: s[len(sl)], Bars: 120})
+		return sl
+	}
+
+	end := s[len(sl)+1]
+	current := s[len(sl)]
+
+	bars := BarsBetween(current, end.AbsTicks)
+	sl = append(sl, SigLength{Sig: current, Bars: bars})
+
+	return s.CalcSigLengths(sl)
+}
+
+func BarsBetween(s TimeSig, e uint64) uint {
+	barTicks := s.GetBarEnd(0)
+	return uint(e) / uint(barTicks)
+}
 
 func (s SigList) GetCurrSig(t uint64) (TimeSig, error) {
 	reverseSigs := ReverseSigList(s)
+
 	for _, sig := range reverseSigs {
 		if t >= sig.AbsTicks {
 			return sig, nil
 		}
 	}
+
 	return TimeSig{}, errors.New("time outside valid range of sigs")
 }
 
@@ -33,14 +60,14 @@ func ReverseSigList(s SigList) SigList {
 	return clone
 }
 
-func GetTimeSigs(f *smf.SMF) []TimeSig {
+func GetTimeSigs(f *smf.SMF) SigList {
 	tracks := f.Tracks
 
 	if len(tracks) < 1 {
-		return []TimeSig{}
+		return SigList{}
 	}
 
-	var timeSigs []TimeSig
+	var timeSigs SigList
 	var absTicks uint64
 
 	for _, event := range tracks[0] { // prefer not to use [0] index ideally

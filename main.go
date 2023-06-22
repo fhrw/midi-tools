@@ -14,10 +14,10 @@ func main() {
 		log.Println("something went wrong")
 	}
 
-	noteOn, noteOff := analyze.GetAllNote(file)
+	sigs := analyze.GetTimeSigs(file)
+	lengths := sigs.CalcSigLengths([]analyze.SigLength{})
 
-	notes := analyze.MatchOnOffs(noteOn, noteOff)
-	_ = notes
-	_ = file
-
+	for _, ele := range lengths {
+		fmt.Printf("%v, %v\n", ele.Sig, ele.Bars)
+	}
 }
