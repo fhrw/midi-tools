@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"midi-mangler/internal/analyze"
 
@@ -17,5 +18,6 @@ func main() {
 
 	notes := analyze.MatchOnOffs(noteOn, noteOff)
 	_ = notes
+	_ = file
 
 }
