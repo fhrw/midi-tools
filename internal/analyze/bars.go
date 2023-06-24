@@ -21,9 +21,16 @@ type SigList []TimeSig
 
 func foo(bn, s int, siglen SigLength) uint64 {
 	barLen := siglen.Sig.GetBarEnd(0)
+	startTime := siglen.Sig.AbsTicks
+	startBar := s
 	for i := 0; i < int(siglen.Bars); i++ {
-
+		if startBar == bn {
+			return startTime
+		}
+		startTime += barLen
+		startBar++
 	}
+	return startTime
 }
 
 func GetSigChunk(bn, count, i int, sigs []SigLength) (int, int, SigLength) {
