@@ -19,8 +19,28 @@ type SigLength struct {
 
 type SigList []TimeSig
 
+func foo(bn, s int, siglen SigLength) uint64 {
+	barLen := siglen.Sig.GetBarEnd(0)
+	for i := 0; i < int(siglen.Bars); i++ {
+
+	}
+}
+
+func GetSigChunk(bn, count, i int, sigs []SigLength) (int, int, SigLength) {
+	// doesn't catch bn out of range
+	if count >= bn {
+		if i < 1 {
+			return 0, (count - int(sigs[0].Bars)) + 1, sigs[0]
+		}
+		return i - 1, (count - int(sigs[i-1].Bars)) + 1, sigs[i-1]
+	}
+
+	return GetSigChunk(bn, (count + int(sigs[i].Bars)), (i + 1), sigs)
+}
+
 func (s SigList) CalcSigLengths(sl []SigLength) []SigLength {
 	if len(sl) == len(s)-1 {
+		// returns 120 for the last bar coz how else can know how long?
 		sl = append(sl, SigLength{Sig: s[len(sl)], Bars: 120})
 		return sl
 	}

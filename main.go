@@ -20,4 +20,7 @@ func main() {
 	for _, ele := range lengths {
 		fmt.Printf("%v, %v\n", ele.Sig, ele.Bars)
 	}
+
+	idx, startCount, segment := analyze.GetSigChunk(5, 0, 0, lengths)
+	fmt.Println(idx, startCount, segment)
 }
