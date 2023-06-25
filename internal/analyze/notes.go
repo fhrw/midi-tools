@@ -28,7 +28,9 @@ type NoteList []Note
 func (n NoteList) GetBarNotes(t int, s, e uint64) NoteList {
 	var notes []Note
 	for _, note := range n {
-		if note.Start >= s && note.Start < e && note.Track == t {
+		if note.Start >= s &&
+			note.Start < e &&
+			note.Track == t {
 			notes = append(notes, note)
 		}
 	}

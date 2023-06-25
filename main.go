@@ -21,6 +21,8 @@ func main() {
 		fmt.Printf("%v, %v\n", ele.Sig, ele.Bars)
 	}
 
-	idx, startCount, segment := analyze.GetSigChunk(5, 0, 0, lengths)
-	fmt.Println(idx, startCount, segment)
+	noteOn, noteOff := analyze.GetAllNote(file)
+	notes := analyze.MatchOnOffs(noteOn, noteOff)
+	_ = notes
+
 }

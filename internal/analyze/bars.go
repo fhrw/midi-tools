@@ -19,7 +19,7 @@ type SigLength struct {
 
 type SigList []TimeSig
 
-func foo(bn, s int, siglen SigLength) uint64 {
+func GetStartTimeInSegment(bn, s int, siglen SigLength) uint64 {
 	barLen := siglen.Sig.GetBarEnd(0)
 	startTime := siglen.Sig.AbsTicks
 	startBar := s
