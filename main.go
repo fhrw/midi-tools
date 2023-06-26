@@ -21,8 +21,11 @@ func main() {
 		fmt.Printf("%v, %v\n", ele.Sig, ele.Bars)
 	}
 
-	noteOn, noteOff := analyze.GetAllNote(file)
-	notes := analyze.MatchOnOffs(noteOn, noteOff)
-	_ = notes
+	notes := analyze.Asdf(file)
 
+	for _, note := range notes {
+		if note.Track == 2 {
+			fmt.Printf("---note---\nstart: %v\nend: %v\n", note.Start, note.End)
+		}
+	}
 }
