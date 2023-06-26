@@ -10,20 +10,14 @@ type TimeSig struct {
 	Num      uint8
 	Denom    uint8
 	AbsTicks uint64
-	Length   uint
+	End      uint64
 }
 
 type SigList []TimeSig
 
-func ReadTimeSigs(f *smf.SMF) SigList {
+func ReadTimeSigs(c smf.Track) SigList {
 	var sigs SigList
-
 	return sigs
-}
-
-func BarsBetween(s TimeSig, e uint64) uint {
-	barTicks := s.GetBarEnd(0)
-	return uint(e) / uint(barTicks)
 }
 
 func (s SigList) GetCurrSig(t uint64) (TimeSig, error) {
@@ -45,28 +39,4 @@ func ReverseSigList(s SigList) SigList {
 		clone[i], clone[j] = clone[j], clone[i]
 	}
 	return clone
-}
-
-func (t TimeSig) GetBarEnd(s uint64) uint64 {
-	return s + uint64(t.Num)*GetDenomTicks(t.Denom)
-}
-
-func GetDenomTicks(d uint8) uint64 {
-	if d == 2 {
-		return 1920
-	}
-
-	if d == 4 {
-		return 960
-	}
-
-	if d == 8 {
-		return 480
-	}
-
-	if d == 16 {
-		return 240
-	}
-
-	return 0
 }

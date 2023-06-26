@@ -6,15 +6,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetBarEnd(t *testing.T) {
-	t.Parallel()
-
-	t.Run("should return correct end value", func(t *testing.T) {
-		ts := TimeSig{Num: 4, Denom: 4, AbsTicks: 0}
-		require.Equal(t, uint64(3840), ts.GetBarEnd(0))
-	})
-}
-
 func TestGetCurrSig(t *testing.T) {
 	t.Parallel()
 

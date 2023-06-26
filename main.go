@@ -14,15 +14,12 @@ func main() {
 		log.Println("something went wrong")
 	}
 
-	sigs := analyze.GetTimeSigs(file)
-	lengths := sigs.CalcSigLengths([]analyze.SigLength{})
-
-	for _, ele := range lengths {
-		fmt.Printf("%v, %v\n", ele.Sig, ele.Bars)
-	}
+	conductorTrack := file.Tracks[0]
 
 	notes := analyze.Asdf(file)
+	_ = notes
 
-	track := 2
-
+	for _, ev := range conductorTrack {
+		fmt.Println(ev)
+	}
 }
