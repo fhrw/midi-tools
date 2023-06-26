@@ -23,9 +23,6 @@ func main() {
 
 	notes := analyze.Asdf(file)
 
-	for _, note := range notes {
-		if note.Track == 2 {
-			fmt.Printf("---note---\nstart: %v\nend: %v\n", note.Start, note.End)
-		}
-	}
+	track := 2
+
 }
