@@ -15,8 +15,32 @@ type TimeSig struct {
 
 type SigList []TimeSig
 
-func ReadTimeSigs(c smf.Track) SigList {
+func TimeSigReader(t smf.Track) SigList {
 	var sigs SigList
+	var absticks uint64
+	for i, ev := range t {
+		absticks += uint64(ev.Delta)
+		msg := ev.Message
+		if msg.Is(smf.MetaTimeSigMsg) {
+			// find the next one
+			var localDelta uint64
+			rest := t[i+1:]
+			for _, next := range rest {
+				localDelta += uint64(next.Delta)
+				nextMsg := next.Message
+				if nextMsg.Is(smf.MetaTimeSigMsg) {
+					// this means you've found the next one!
+					// create new and break
+					var (
+						num, denom uint8
+					)
+					msg.GetMetaMeter(&num, &denom)
+					sigs = append(sigs, TimeSig{Num: num, Denom: denom, AbsTicks: absticks, End: absticks + localDelta})
+					break
+				}
+			}
+		}
+	}
 	return sigs
 }
 

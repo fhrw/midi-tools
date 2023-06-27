@@ -15,11 +15,12 @@ func main() {
 	}
 
 	conductorTrack := file.Tracks[0]
+	timeSigs := analyze.TimeSigReader(conductorTrack)
 
 	notes := analyze.Asdf(file)
 	_ = notes
 
-	for _, ev := range conductorTrack {
-		fmt.Println(ev)
+	for _, sig := range timeSigs {
+		fmt.Println(sig)
 	}
 }
