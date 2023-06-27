@@ -37,30 +37,7 @@ func (n NoteList) GetBarNotes(t int, s, e uint64) NoteList {
 	return notes
 }
 
-func MatchOnOffs(on []NoteOn, off []NoteOff) NoteList {
-	var notes []Note
-
-	for _, n := range on {
-		var end uint64
-		for _, f := range off {
-			if n.Track == f.Track &&
-				n.Pitch == f.Pitch &&
-				n.Start < f.End {
-				end = f.End
-			}
-		}
-		notes = append(notes, Note{
-			Track: n.Track,
-			Pitch: n.Pitch,
-			Start: n.Start,
-			End:   end,
-		})
-	}
-
-	return notes
-}
-
-func Asdf(f *smf.SMF) NoteList {
+func NoteReader(f *smf.SMF) NoteList {
 	var notes NoteList
 	for i, track := range f.Tracks {
 		var absTicks uint64
