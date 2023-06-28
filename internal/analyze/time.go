@@ -15,6 +15,7 @@ type TimeSig struct {
 
 type SigList []TimeSig
 
+// Gets bar start and end given a siglist and a bar number
 func (s SigList) GetBar(b uint) (start, end uint64) {
 	var (
 		st, en uint64
@@ -32,6 +33,7 @@ func (s SigList) GetBar(b uint) (start, end uint64) {
 			for ((uint64(counter) * offset) + sig.AbsTicks) < sig.End {
 				if uint(counter+currStart) == b {
 					st = sig.AbsTicks + (uint64(counter) * offset)
+					en = st + offset
 				}
 				counter++
 			}
@@ -44,6 +46,8 @@ func (s SigList) GetBar(b uint) (start, end uint64) {
 	return st, en
 }
 
+// given ticks per quarter, calculates number of a bars between
+// time sig start and end
 func (t TimeSig) BarsLong(ticks uint32) uint {
 	span := t.End - t.AbsTicks
 	barTicks := (ticks * uint32(DenomMultiplier(t.Denom)) * uint32(t.Num))
@@ -64,6 +68,7 @@ func DenomMultiplier(d uint8) float64 {
 	return 1.0
 }
 
+// reads sigs from time track
 func TimeSigReader(t smf.Track) SigList {
 	var sigs SigList
 	var absticks uint64
@@ -98,6 +103,7 @@ func TimeSigReader(t smf.Track) SigList {
 	return sigs
 }
 
+// probably outdated
 func (s SigList) GetCurrSig(t uint64) (TimeSig, error) {
 	reverseSigs := ReverseSigList(s)
 

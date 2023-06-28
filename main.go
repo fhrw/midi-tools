@@ -19,13 +19,11 @@ func main() {
 	timeSigs := analyze.TimeSigReader(conductorTrack)
 
 	notes := analyze.NoteReader(file)
-	_ = notes
 
-	for _, sig := range timeSigs {
-		fmt.Println("--- SIG ---")
-		fmt.Println(sig)
-		fmt.Println(sig.BarsLong(480))
-	}
+	s, e := timeSigs.GetBar(10)
 
-	fmt.Println(timeSigs.GetBar(6))
+	barnotes := notes.GetBarNotes(2, s, e)
+
+	fmt.Println(s, e)
+	fmt.Println(barnotes)
 }
