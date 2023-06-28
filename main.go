@@ -24,6 +24,7 @@ func main() {
 
 	barnotes := notes.GetBarNotes(2, s, e)
 
+	fmt.Println(analyze.ReadTrackName(file.Tracks[2]))
 	fmt.Println(s, e)
 	fmt.Println(barnotes)
 }
