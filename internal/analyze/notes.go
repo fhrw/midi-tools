@@ -25,6 +25,26 @@ type NoteOff struct {
 
 type NoteList []Note
 
+func (n NoteList) RemoveOverlaps() NoteList {
+	var cleanedNotes NoteList
+	for i, note := range n {
+		if i == len(n)-1 {
+			cleanedNotes = append(cleanedNotes, note)
+		}
+		if note.End > n[i+1].Start {
+			cleanedNotes = append(cleanedNotes, Note{
+				Track: note.Track,
+				Pitch: note.Pitch,
+				Start: note.Start,
+				End:   n[i+1].Start,
+			})
+		} else {
+			cleanedNotes = append(cleanedNotes, note)
+		}
+	}
+	return cleanedNotes
+}
+
 func (n NoteList) GetBarNotes(t int, s, e uint64) NoteList {
 	var notes []Note
 	for _, note := range n {

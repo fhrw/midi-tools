@@ -103,6 +103,11 @@ func TimeSigReader(t smf.Track) SigList {
 	return sigs
 }
 
+// given a ticks per quarter (t) and desired value (v) returns the value in ticks
+func CalcNoteLength(t uint64, v uint) uint64 {
+	return t / (uint64(v) / 4)
+}
+
 // probably outdated
 func (s SigList) GetCurrSig(t uint64) (TimeSig, error) {
 	reverseSigs := ReverseSigList(s)
